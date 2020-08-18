@@ -9,3 +9,5 @@
 / HomeR GET POST
 
 /comments CommentR POST
+
+/stm StmExampleR GET

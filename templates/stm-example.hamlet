@@ -1,0 +1,3 @@
+<h3>STM Example
+<p>See https://www.stackage.org/lts-16.10/package/stm for more info on STM.
+<p>Current STM Value: #{stmValue}
