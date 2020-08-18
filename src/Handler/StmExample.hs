@@ -12,7 +12,9 @@ import Import
 getStmExampleR :: Handler Html
 getStmExampleR = do
     App {..} <- getYesod
-    stmValue <- atomically $ readTMVar stmExample
+    stmValue <- atomically $ readTVar stmExample
+    let newValue = (stmValue + (10 :: Int))
+    atomically $ writeTVar stmExample newValue
     defaultLayout $ do
         setTitle "STM Example!"
         $(widgetFile "stm-example")
