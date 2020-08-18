@@ -14,6 +14,7 @@ data StmFormData = StmFormData
   , sumValue :: Int
   , textValue :: Text
   , textareaValue :: Textarea
+  , htmlValue :: Html
   }
 
 
@@ -24,6 +25,7 @@ stmForm = renderDivs $ StmFormData
     <*> areq intField "add this int to the base" Nothing
     <*> areq textField "Text value" Nothing
     <*> areq textareaField "Textarea value" Nothing
+    <*> areq htmlField "Html text value" Nothing
 
 
 getStmExampleR :: Handler Html
@@ -33,6 +35,7 @@ getStmExampleR = do
     sumValue  <- atomically $ readTVar stmSumValue
     textValue <- atomically $ readTVar stmTextValue
     textareaValue <- atomically $ readTVar stmTextareaValue
+    htmlValue <- atomically $ readTVar stmHtmlValue
     let newValue = baseValue' + sumValue
     atomically $ writeTVar stmBaseValue newValue
     baseValue <- atomically $ readTVar stmBaseValue
@@ -48,6 +51,7 @@ getStmFormR = do
     sumValue  <- atomically $ readTVar stmSumValue
     textValue <- atomically $ readTVar stmTextValue
     textareaValue <- atomically $ readTVar stmTextareaValue
+    htmlValue <- atomically $ readTVar stmHtmlValue
     (formWidget, formEnctype) <- generateFormPost stmForm
 
     defaultLayout $ do
@@ -66,11 +70,13 @@ postStmFormR = do
           writeTVar stmSumValue  (sumValue entry)
           writeTVar stmTextValue (textValue entry)
           writeTVar stmTextareaValue (textareaValue entry)
+          writeTVar stmHtmlValue (htmlValue entry)
 
         baseValue <- atomically $ readTVar stmBaseValue
         sumValue  <- atomically $ readTVar stmSumValue
         textValue <- atomically $ readTVar stmTextValue
         textareaValue <- atomically $ readTVar stmTextareaValue
+        htmlValue <- atomically $ readTVar stmHtmlValue
 
         setTitle "STM Example!"
         $(widgetFile "stm-form")
@@ -82,5 +88,6 @@ postStmFormR = do
         sumValue  <- atomically $ readTVar stmSumValue
         textValue <- atomically $ readTVar stmTextValue
         textareaValue <- atomically $ readTVar stmTextareaValue
+        htmlValue <- atomically $ readTVar stmHtmlValue
         setTitle "STM Example!"
         $(widgetFile "stm-form")

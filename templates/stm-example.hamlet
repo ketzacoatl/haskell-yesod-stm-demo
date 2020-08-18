@@ -7,5 +7,5 @@
   <li>Sum Int: #{sumValue} (add to base when loading the /stm url)
   <li>Text Value: #{textValue}
   <li>Textarea Value: #{textareaValue}
-  <li>Html Value: WIP
+  <li>Html Value: #{htmlValue}
 

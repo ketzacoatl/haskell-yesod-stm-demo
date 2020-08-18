@@ -30,6 +30,7 @@ data App = App
     , stmBaseValue   :: TVar Int
     , stmSumValue    :: TVar Int
     , stmTextValue   :: TVar Text
+    , stmHtmlValue   :: TVar Html
     , stmTextareaValue :: TVar Textarea
     }
 

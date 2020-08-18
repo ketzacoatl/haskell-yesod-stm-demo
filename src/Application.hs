@@ -64,6 +64,7 @@ makeFoundation appSettings = do
     stmSumValue <- newTVarIO (0 :: Int)
     stmTextValue <- newTVarIO ("" :: Text)
     stmTextareaValue <- newTVarIO ("" :: Textarea)
+    stmHtmlValue <- newTVarIO ("" :: Html)
 
     -- Return the foundation
     return App {..}
