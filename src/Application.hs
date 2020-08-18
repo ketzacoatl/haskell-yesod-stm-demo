@@ -60,7 +60,10 @@ makeFoundation appSettings = do
     appStatic <-
         (if appMutableStatic appSettings then staticDevel else static)
         (appStaticDir appSettings)
-    stmExample <- newTVarIO (10 :: Int)
+    stmBaseValue <- newTVarIO (10 :: Int)
+    stmSumValue <- newTVarIO (0 :: Int)
+    stmTextValue <- newTVarIO ("" :: Text)
+    stmTextareaValue <- newTVarIO ("" :: Textarea)
 
     -- Return the foundation
     return App {..}

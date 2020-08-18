@@ -9,14 +9,78 @@ module Handler.StmExample where
 import Import
 
 
+data StmFormData = StmFormData
+  { baseValue :: Int
+  , sumValue :: Int
+  , textValue :: Text
+  , textareaValue :: Textarea
+  }
+
+
+
+stmForm :: Form StmFormData
+stmForm = renderDivs $ StmFormData
+    <$> areq intField "Base value" Nothing
+    <*> areq intField "add this int to the base" Nothing
+    <*> areq textField "Text value" Nothing
+    <*> areq textareaField "Textarea value" Nothing
+
+
 getStmExampleR :: Handler Html
 getStmExampleR = do
     App {..} <- getYesod
-    stmValue <- atomically $ readTVar stmExample
-    let newValue = (stmValue + (10 :: Int))
-    atomically $ writeTVar stmExample newValue
+    baseValue' <- atomically $ readTVar stmBaseValue
+    sumValue  <- atomically $ readTVar stmSumValue
+    textValue <- atomically $ readTVar stmTextValue
+    textareaValue <- atomically $ readTVar stmTextareaValue
+    let newValue = baseValue' + sumValue
+    atomically $ writeTVar stmBaseValue newValue
+    baseValue <- atomically $ readTVar stmBaseValue
     defaultLayout $ do
         setTitle "STM Example!"
         $(widgetFile "stm-example")
 
 
+getStmFormR :: Handler Html
+getStmFormR = do
+    App {..} <- getYesod
+    baseValue <- atomically $ readTVar stmBaseValue
+    sumValue  <- atomically $ readTVar stmSumValue
+    textValue <- atomically $ readTVar stmTextValue
+    textareaValue <- atomically $ readTVar stmTextareaValue
+    (formWidget, formEnctype) <- generateFormPost stmForm
+
+    defaultLayout $ do
+        setTitle "STM Example!"
+        $(widgetFile "stm-form")
+
+postStmFormR :: Handler Html
+postStmFormR = do
+    ((result, formWidget), formEnctype) <- runFormPost stmForm
+    case result of
+      -- Yay! Form is valid
+      FormSuccess entry -> defaultLayout $ do
+        App {..} <- getYesod
+        atomically $ do
+          writeTVar stmBaseValue (baseValue entry)
+          writeTVar stmSumValue  (sumValue entry)
+          writeTVar stmTextValue (textValue entry)
+          writeTVar stmTextareaValue (textareaValue entry)
+
+        baseValue <- atomically $ readTVar stmBaseValue
+        sumValue  <- atomically $ readTVar stmSumValue
+        textValue <- atomically $ readTVar stmTextValue
+        textareaValue <- atomically $ readTVar stmTextareaValue
+
+        setTitle "STM Example!"
+        $(widgetFile "stm-form")
+
+      -- utoh! Form failed validation
+      _ -> defaultLayout $ do
+        App {..} <- getYesod
+        baseValue <- atomically $ readTVar stmBaseValue
+        sumValue  <- atomically $ readTVar stmSumValue
+        textValue <- atomically $ readTVar stmTextValue
+        textareaValue <- atomically $ readTVar stmTextareaValue
+        setTitle "STM Example!"
+        $(widgetFile "stm-form")

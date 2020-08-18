@@ -1,5 +1,8 @@
-<h3>STM Example
-<p>See https://www.stackage.org/lts-16.10/package/stm for more info on STM.
+<h3>STM Form Example
+
+<form action=@{StmFormR} method=post enctype=#{formEnctype}>
+  ^{formWidget}
+  <button>Save Form
 
 <p>Current Values Stored in STM:
 <ul>

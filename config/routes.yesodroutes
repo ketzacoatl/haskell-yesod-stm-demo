@@ -11,3 +11,4 @@
 /comments CommentR POST
 
 /stm StmExampleR GET
+/form StmFormR   GET POST

@@ -27,7 +27,10 @@ data App = App
     , appStatic      :: Static -- ^ Settings for static file serving.
     , appHttpManager :: Manager
     , appLogger      :: Logger
-    , stmExample     :: TVar Int
+    , stmBaseValue   :: TVar Int
+    , stmSumValue    :: TVar Int
+    , stmTextValue   :: TVar Text
+    , stmTextareaValue :: TVar Textarea
     }
 
 data MenuItem = MenuItem
